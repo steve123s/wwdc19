@@ -25,13 +25,14 @@ public class GameScene: SKScene {
                                              ["🐁","🐀"],
                                              ["🦊","🐰"],
                                              ["🐭","🐹"],
-                                             ["🐛","🦋"]]
+                                             ["🐛","🦋"],
+                                             ["🐏","🐑"]]
     
     var level: Int = 1
     var timer: Int = 0
     var logic: GameActions?
     
-    var titleLabelNode: SKLabelNode?
+    var question: SKSpriteNode?
     var levelLabelNode: SKLabelNode?
     var timerLabelNode: SKLabelNode?
     
@@ -47,10 +48,14 @@ public class GameScene: SKScene {
         background.position = CGPoint(x: frame.midX, y: frame.midY)
         addChild(background)
         
+        question = SKSpriteNode(imageNamed: "question.png")
+        question?.zPosition = 1
+        question?.position = CGPoint(x: frame.midX, y: 250)
+        addChild(question!)
+        
         // connect nodes with scene
         self.levelLabelNode = childNode(withName: "level") as? SKLabelNode
         self.timerLabelNode = childNode(withName: "timer") as? SKLabelNode
-        self.titleLabelNode = childNode(withName: "title") as? SKLabelNode
         
         // configure the labels text
         self.levelLabelNode?.text = "Score : \(level*10 - 10)"
@@ -97,22 +102,24 @@ extension GameScene {
     
     func setupGrid() {
         switch level {
-        case 1...5:
+        case 1...3:
             drawGrid(rows: 2, cols: 2)
-        case 6...10:
+        case 4...6:
             drawGrid(rows: 3, cols: 2)
-        case 11...15:
+        case 7...9:
             drawGrid(rows: 4, cols: 3)
-        case 16...20:
+        case 10...12:
             drawGrid(rows: 5, cols: 4)
-        case 21...25:
+        case 13...15:
             drawGrid(rows: 5, cols: 5)
-        case 26...30:
+        case 16...18:
             drawGrid(rows: 6, cols: 5)
-        case 31...35:
+        case 19...21:
             drawGrid(rows: 7, cols: 5)
-        default:
+        case 19...21:
             drawGrid(rows: 8, cols: 6)
+        default:
+            drawGrid(rows: 9, cols: 7)
         }
         
     }
@@ -183,7 +190,7 @@ extension GameScene {
     func gameOver(description: String) {
         removeAllActions()
         isUserInteractionEnabled = false
-        titleLabelNode?.isHidden = true
+        question?.isHidden = true
         /*let action = SKAction.playSoundFileNamed("lose.mp3", waitForCompletion: true)
         self.run(action)*/
         let overMsg = SKLabelNode(fontNamed: "HelveticaNeue-Bold")

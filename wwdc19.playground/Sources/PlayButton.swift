@@ -24,7 +24,7 @@ public class PlayButton: SKSpriteNode {
     // MARK: Lifecycle
     
     init() {
-        let texture = SKTexture(imageNamed: "startButton")
+        let texture = SKTexture(imageNamed: "playButton")
         
         let color = SKColor.red
         let size = CGSize(width: 120, height: 36)
