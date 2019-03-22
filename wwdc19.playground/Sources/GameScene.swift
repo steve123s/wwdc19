@@ -29,7 +29,7 @@ public class GameScene: SKScene {
                                              ["🐏","🐑"]]
     
     var level: Int = 1
-    var timer: Int = 0
+    var timer: Double = 8.0
     var logic: GameActions?
     
     var question: SKSpriteNode?
@@ -50,7 +50,7 @@ public class GameScene: SKScene {
         
         question = SKSpriteNode(imageNamed: "question.png")
         question?.zPosition = 1
-        question?.position = CGPoint(x: frame.midX, y: 250)
+        question?.position = CGPoint(x: frame.midX, y: 220)
         addChild(question!)
         
         // connect nodes with scene
@@ -139,33 +139,18 @@ extension GameScene {
     
     //set timer for each level
     func setupTimer() {
-        var timer = 0
-        if (level >= 1 && level <=  5) {
-            timer = 8
-        } else if (level >= 6 && level <=  10) {
-            timer = 7
-        } else if (level >= 11 && level <=  15) {
-            timer = 6
-        } else if (level >= 16 && level <=  20) {
-            timer = 5
-        } else if (level >= 21 && level <=  25) {
-            timer = 4
-        } else if (level >= 26 && level <=  30) {
-            timer = 3
-        } else if (level >= 31) {
-            timer = 2
-        }
         
-        let runTimer = timer
-        let waitTimer = SKAction.wait(forDuration: 1)
+        self.timerLabelNode?.horizontalAlignmentMode = .left
+        let waitTimer = SKAction.wait(forDuration: 0.01)
         let actionTimer = SKAction.run {
-            self.timerLabelNode?.text = "⏰: \(timer)"
-            if timer == 0 {
+            self.timerLabelNode?.text = "⏰: " + String(format: "%.2f", self.timer)
+            if self.timer <= 0.0 {
+                self.timerLabelNode?.text = "⏰: " + String(format: "%.2f", "0.00")
                 self.gameOver(description: "⌚️ You ran out of time! ⌚️")
             }
-            timer = timer - 1
+            self.timer = self.timer - 0.01
         }
-        run(SKAction.repeat(SKAction.sequence([actionTimer, waitTimer]) , count: runTimer+1 ))
+        run(SKAction.repeatForever(SKAction.sequence([actionTimer, waitTimer])))
     }
 }
 
@@ -238,15 +223,37 @@ extension GameScene {
         })
     }
     
+    func showPoints(pointsNumber: Int, position: CGPoint) -> SKLabelNode? {
+        var points: SKLabelNode!
+        //Show label
+        points = SKLabelNode(fontNamed: "Chalkduster")
+        points.text = "+" + String(pointsNumber)
+        points.horizontalAlignmentMode = .left
+        points.fontSize = 60
+        points.position = CGPoint(x: position.x + 240.0, y: position.y + 40.0)
+        
+        //Remove label
+        let scaleOut = SKAction.scale(to: 0.01, duration:1.0)
+        let fadeOut = SKAction.fadeOut(withDuration: 1.0)
+        let group = SKAction.group([scaleOut, fadeOut])
+        let seq = SKAction.sequence([group, SKAction.removeFromParent()])
+        points.run(seq)
+        
+        return points
+    }
+    
     func moveToNextLevel() {
+        let extraTime = 1
+        addChild(showPoints(pointsNumber: extraTime, position: timerLabelNode?.position ?? CGPoint.zero)!)
         let action =  SKAction.run {
             let transition = SKTransition.crossFade(withDuration: 0)
             let nextLevelScene = GameScene(fileNamed:"GameScene")
             nextLevelScene!.level = self.level + 1
+            nextLevelScene!.timer = self.timer + Double(extraTime)
             nextLevelScene!.scaleMode = SKSceneScaleMode.aspectFill
             self.scene!.view?.presentScene(nextLevelScene!, transition: transition)
         }
-        self.run(SKAction.sequence([SKAction.wait(forDuration : 0.35), action ]))
+        self.run(SKAction.sequence([SKAction.wait(forDuration : 0.25), action]))
         
         
     }
