@@ -13,7 +13,8 @@ import GameKit
 
 public class FirstScene: SKScene {
     
-    let emojis: [String] = ["🐶","🐱","🐻","🐼","🐴","🦄","🦁","🐯",
+    let emojis: [String] = ["🐶","🐱",
+                            "🐻","🐼","🐴","🦄","🦁","🐯",
                             "🐦","🐤","🐣","🐥","🙉","🙈","🐠","🐟",
                             "🐪","🐫","🦖","🦎","🐑","🐐","🐁","🐀",
                              "🦊","🐰","🐭","🐹", "🐛","🦋"]
@@ -82,8 +83,6 @@ public class FirstScene: SKScene {
     }
     
     func dropRandomEmoji() {
-        //let action = SKAction.playSoundFileNamed("begin.mp3", waitForCompletion: false)
-        //self.run(action)
         let randomIndex = GKRandomSource.sharedRandom().nextInt(upperBound: emojis.count)
         let emojiLabel = SKLabelNode(text: emojis[randomIndex])
         emojiLabel.fontSize = CGFloat(40)
@@ -107,9 +106,7 @@ public class FirstScene: SKScene {
 extension FirstScene: PlayButtonDelegate {
     
     func didTapPlay(sender: PlayButton) {
-        /*
-        let action = SKAction.playSoundFileNamed("popSound.mp3", waitForCompletion: false)
-        self.run(action)*/
+        
         let transition = SKTransition.crossFade(withDuration: 0)
         let scene1 = GameScene(fileNamed:"GameScene")
         print("scene created")

@@ -14,7 +14,7 @@ protocol GameEvents {
     var level: Int { get set }
     var timer: Double {get set}
     
-    func userDidRightChoice(index: Int)
+    func userDidRightChoice()
     func userDidWrongChoice()
     
     func gameOver(description: String)
