@@ -29,7 +29,11 @@ public class GameScene: SKScene {
                                              ["🐛","🦋"],
                                              ["🐏","🐑"],
                                              ["🦝","🦡"],
-                                             ["🐕","🐈"]]
+                                             ["🐕","🐈"],
+                                             ["🐬","🐳"],
+                                             ["🐘","🦏"],
+                                             ["🦞","🦀"],
+                                             ["🙊","🐵"]]
     
     var level: Int = 1
     var timer: Double = 8.0
@@ -149,7 +153,7 @@ extension GameScene {
             self.timerLabelNode?.text = "⏰: " + String(format: "%.2f", self.timer)
             if self.timer <= 0.0 {
                 self.timerLabelNode?.text = "⏰: " + String(format: "%.2f", "0.00")
-                self.gameOver(description: "⌚️ You ran out of time! ⌚️")
+                self.gameOver(description: "You ran out of time!")
             }
             self.timer = self.timer - 0.01
         }
@@ -184,7 +188,7 @@ extension GameScene {
         overMsg.text = description
         overMsg.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: overMsg.frame.width * 1.25 , height: overMsg.frame.height * 2.5))
         overMsg.physicsBody?.isDynamic = false
-        overMsg.fontSize = 50
+        overMsg.fontSize = 60
         overMsg.fontColor = SKColor.black
         overMsg.position = CGPoint(x: frame.midX, y: frame.midY+150)
         addChild(overMsg)

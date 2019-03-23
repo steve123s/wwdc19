@@ -1,5 +1,5 @@
 //
-//  ResetButton.swift
+//  AboutButton.swift
 //  Detective Emoji
 //
 //  Created by Daniel Salinas on 18.03.19.
@@ -8,22 +8,30 @@
 
 import SpriteKit
 
-public class ResetButton: SKSpriteNode {
+
+// MARK: Play Button Delegate
+
+protocol AboutButtonDelegate: class {
+    func didTapAbout(sender: AboutButton)
+}
+
+public class AboutButton: SKSpriteNode {
     
     // MARK: Properties
     
-    weak var delegate: ResetButtonDelegate?
+    weak var delegate: AboutButtonDelegate?
     
     // MARK: Lifecycle
     
     init() {
-        let texture = SKTexture(imageNamed: "restartButton.png")
+        let texture = SKTexture(imageNamed: "aboutButton")
+        
         let color = SKColor.red
-        let size = CGSize(width:  264 , height: 80)
+        let size = CGSize(width: 120, height: 36)
         super.init(texture: texture, color: color, size: size)
         
         isUserInteractionEnabled = true
-        zPosition = 4
+        zPosition = 1
     }
     
     required public init?(coder aDecoder: NSCoder) {
@@ -47,7 +55,7 @@ public class ResetButton: SKSpriteNode {
     public override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         performButtonAppearanceResetAnimation()
-        delegate?.didTapReset(sender: self)
+        delegate?.didTapAbout(sender: self)
         
     }
     
@@ -64,21 +72,5 @@ public class ResetButton: SKSpriteNode {
         run(alphaAction)
     }
     
-}
-
-// MARK: CGPoint Extension for Hit Testing
-
-extension CGPoint {
-    
-    func isInside(node: SKSpriteNode) -> Bool {
-        if self.x > -node.size.width/2, self.x < node.size.width/2, self.y > -node.size.height/2, self.y < node.size.height/2 { return true }
-        return false
-    }
-}
-
-// MARK: ResetButtonDelegate
-
-protocol ResetButtonDelegate: class {
-    func didTapReset(sender: ResetButton)
 }
 
