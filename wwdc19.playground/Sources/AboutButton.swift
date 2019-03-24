@@ -8,8 +8,9 @@
 
 import SpriteKit
 
-
-// MARK: Play Button Delegate
+//------------------------------------
+// MARK: - Protocol
+//------------------------------------
 
 protocol AboutButtonDelegate: class {
     func didTapAbout(sender: AboutButton)
@@ -17,11 +18,15 @@ protocol AboutButtonDelegate: class {
 
 public class AboutButton: SKSpriteNode {
     
-    // MARK: Properties
+    //------------------------------------
+    // MARK: - Properties
+    //------------------------------------
     
     weak var delegate: AboutButtonDelegate?
     
-    // MARK: Lifecycle
+    //------------------------------------
+    // MARK: - Initializers
+    //------------------------------------
     
     init() {
         let texture = SKTexture(imageNamed: "aboutButton")
@@ -38,7 +43,9 @@ public class AboutButton: SKSpriteNode {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: Touch Handling
+    //------------------------------------
+    // MARK: - Touches
+    //------------------------------------
     
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
@@ -64,9 +71,11 @@ public class AboutButton: SKSpriteNode {
         performButtonAppearanceResetAnimation()
     }
     
-    // MARK: Helper Functions
+    //------------------------------------
+    // MARK: - Private Methods
+    //------------------------------------
     
-    func performButtonAppearanceResetAnimation() {
+    private func performButtonAppearanceResetAnimation() {
         let alphaAction = SKAction.fadeAlpha(to: 1.0, duration: 0.10)
         alphaAction.timingMode = .easeInEaseOut
         run(alphaAction)

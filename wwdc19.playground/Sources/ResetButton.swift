@@ -8,13 +8,25 @@
 
 import SpriteKit
 
+//------------------------------------
+// MARK: - Protocol
+//------------------------------------
+
+protocol ResetButtonDelegate: class {
+    func didTapReset(sender: ResetButton)
+}
+
 public class ResetButton: SKSpriteNode {
     
-    // MARK: Properties
+    //------------------------------------
+    // MARK: - Properties
+    //------------------------------------
     
     weak var delegate: ResetButtonDelegate?
     
-    // MARK: Lifecycle
+    //------------------------------------
+    // MARK: - Initializers
+    //------------------------------------
     
     init() {
         let texture = SKTexture(imageNamed: "restartButton.png")
@@ -30,7 +42,9 @@ public class ResetButton: SKSpriteNode {
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: Touch Handling
+    //------------------------------------
+    // MARK: - Touches
+    //------------------------------------
     
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
@@ -56,29 +70,14 @@ public class ResetButton: SKSpriteNode {
         performButtonAppearanceResetAnimation()
     }
     
-    // MARK: Helper Functions
+    //------------------------------------
+    // MARK: - Private Methods
+    //------------------------------------
     
-    func performButtonAppearanceResetAnimation() {
+    private func performButtonAppearanceResetAnimation() {
         let alphaAction = SKAction.fadeAlpha(to: 1.0, duration: 0.10)
         alphaAction.timingMode = .easeInEaseOut
         run(alphaAction)
     }
     
 }
-
-// MARK: CGPoint Extension for Hit Testing
-
-extension CGPoint {
-    
-    func isInside(node: SKSpriteNode) -> Bool {
-        if self.x > -node.size.width/2, self.x < node.size.width/2, self.y > -node.size.height/2, self.y < node.size.height/2 { return true }
-        return false
-    }
-}
-
-// MARK: ResetButtonDelegate
-
-protocol ResetButtonDelegate: class {
-    func didTapReset(sender: ResetButton)
-}
-

@@ -11,8 +11,16 @@ import Foundation
 
 protocol GameEvents {
     
+    //------------------------------------
+    // MARK: - Properties
+    //------------------------------------
+    
     var level: Int { get set }
     var timer: Double {get set}
+    
+    //------------------------------------
+    // MARK: - Methods
+    //------------------------------------
     
     func userDidRightChoice()
     func userDidWrongChoice()

@@ -13,6 +13,10 @@ import GameKit
 
 public class FirstScene: SKScene {
     
+    //------------------------------------
+    // MARK: - Properties
+    //------------------------------------
+    
     let emojis: [String] = ["🐶","🐱",
                             "🐻","🐼","🐴","🦄","🦁","🐯",
                             "🐦","🐤","🐣","🐥","🙉","🙈","🐠","🐟",
@@ -20,6 +24,10 @@ public class FirstScene: SKScene {
                              "🦊","🐰","🐭","🐹", "🐛","🦋"]
     
     private var label : SKLabelNode!
+    
+    //------------------------------------
+    // MARK: - didMove
+    //------------------------------------
     
     public override func didMove(to view: SKView) {
         
@@ -58,6 +66,7 @@ public class FirstScene: SKScene {
         button2.name = "aboutButton"
         button2.position = CGPoint(x: self.frame.midX, y: self.frame.maxY*0.1)
         button2.zPosition = 2
+        button2.alpha = 0
         button2.delegate = self
         
         button.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: button.frame.width * 1.25 , height: button.frame.height * 1.25))
@@ -68,6 +77,8 @@ public class FirstScene: SKScene {
         button.run(.repeatForever(fadeInOut))
         addChild(button)
         addChild(button2)
+        let fadeInAction = SKAction.fadeIn(withDuration: 1.0)
+        button2.run(fadeInAction)
         
         let wait = SKAction.wait(forDuration: 0.1)
         let dropAction = SKAction.run {
@@ -86,7 +97,11 @@ public class FirstScene: SKScene {
         run(SKAction.repeatForever(SKAction.sequence([dropAction, wait, pinAction, stopAction])))
     }
     
-    func dropRandomEmoji() {
+    //------------------------------------
+    // MARK: - Private Methods
+    //------------------------------------
+    
+    private func dropRandomEmoji() {
         let randomIndex = GKRandomSource.sharedRandom().nextInt(upperBound: emojis.count)
         let emojiLabel = SKLabelNode(text: emojis[randomIndex])
         emojiLabel.fontSize = CGFloat(40)
@@ -106,6 +121,9 @@ public class FirstScene: SKScene {
     
 }
 
+//------------------------------------
+// MARK: - Extensions
+//------------------------------------
 
 extension FirstScene: PlayButtonDelegate {
     

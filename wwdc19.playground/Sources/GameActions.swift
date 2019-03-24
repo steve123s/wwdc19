@@ -10,10 +10,17 @@ import Foundation
 
 protocol GameActions {
     
+    //------------------------------------
+    // MARK: - Properties
+    //------------------------------------
+    
     var emojiPairIndex: Int? { get }
     
-    func userHasChosen(_ answer: Bool)
+    //------------------------------------
+    // MARK: - Methods
+    //------------------------------------
     
+    func userHasChosen(_ answer: Bool)
     func setupLogic(delegate: GameEvents, emojiPairIndex: Int)
     
 }

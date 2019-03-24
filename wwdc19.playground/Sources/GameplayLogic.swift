@@ -13,15 +13,20 @@ import Foundation
 import GameKit
 
 public class GameplayLogic {
-    // Delegate
+    
     var delegate: GameEvents?
     
-    // Protocol properties
-    var emojiPairIndex: Int?
+    //------------------------------------
+    // MARK: - Properties
+    //------------------------------------
     
+    var emojiPairIndex: Int?
     var correctEmojiIndex: Int?
     
-    // Initializer
+    //------------------------------------
+    // MARK: - Methods
+    //------------------------------------
+    
     func setupLogic(delegate: GameEvents, emojiPairIndex: Int) {
         self.delegate = delegate
         self.emojiPairIndex = emojiPairIndex
@@ -31,18 +36,15 @@ public class GameplayLogic {
     }
 }
 
-// MARK: - Initial Setups
-extension GameplayLogic {
-    
-    // configuration of levels
-}
+//------------------------------------
+// MARK: - Extensions
+//------------------------------------
 
 extension GameplayLogic: GameActions {
     
     func userHasChosen(_ answer: Bool) {
         answer == true ? self.delegate?.moveToNextLevel() : self.delegate?.gameOver(description: "😣 You Lost 😣")
     }
-    
     
 }
 

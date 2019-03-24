@@ -11,6 +11,10 @@ import SpriteKit
 
 public class GameScene: SKScene {
     
+    //------------------------------------
+    // MARK: - Properties
+    //------------------------------------
+    
     private let possiblePairs: [[String]] = [["⏰","⏱"],
                                              ["🐶","🐱"],
                                              ["🐻","🐼"],
@@ -36,7 +40,7 @@ public class GameScene: SKScene {
                                              ["🙊","🐵"]]
     
     var level: Int = 1
-    var timer: Double = 8.0
+    var timer: Double = 6.0
     var logic: GameActions?
     
     var question: SKSpriteNode?
@@ -44,6 +48,10 @@ public class GameScene: SKScene {
     var timerLabelNode: SKLabelNode?
     
     var deckNodes: [SKLabelNode] = []
+    
+    //------------------------------------
+    // MARK: - didMove
+    //------------------------------------
     
     public override func didMove(to view: SKView) {
         
@@ -88,8 +96,11 @@ public class GameScene: SKScene {
     
 }
 
-// MARK: - Drawings
-extension GameScene {
+//------------------------------------
+// MARK: - Private Methods
+//------------------------------------
+
+private extension GameScene {
     
     func drawGrid(rows: Int, cols: Int) {
         for row in 0..<rows {
@@ -144,7 +155,6 @@ extension GameScene {
         wrongNode.name = "differentEmoji"
     }
     
-    //set timer for each level
     func setupTimer() {
         
         self.timerLabelNode?.horizontalAlignmentMode = .left
@@ -159,23 +169,31 @@ extension GameScene {
         }
         run(SKAction.repeatForever(SKAction.sequence([actionTimer, waitTimer])))
     }
-}
 
-// MARK: - Event Delegation
-extension GameScene: GameEvents {
-    
-    func userDidRightChoice() {
-        let action = SKAction.playSoundFileNamed("right.wav", waitForCompletion: false)
-        self.run(action)
+    func showPoints(pointsNumber: Int, position: CGPoint) -> SKLabelNode? {
+        var points: SKLabelNode!
+        //Show label
+        points = SKLabelNode(fontNamed: "Chalkduster")
+        points.text = "+" + String(pointsNumber)
+        points.horizontalAlignmentMode = .left
+        points.fontSize = 60
+        points.position = CGPoint(x: position.x + 240.0, y: position.y + 40.0)
+        
+        //Remove label
+        let scaleOut = SKAction.scale(to: 0.01, duration:1.0)
+        let fadeOut = SKAction.fadeOut(withDuration: 1.0)
+        let group = SKAction.group([scaleOut, fadeOut])
+        let seq = SKAction.sequence([group, SKAction.removeFromParent()])
+        points.run(seq)
+        
+        return points
     }
     
-    func userDidWrongChoice() {
-        let action = SKAction.playSoundFileNamed("wrong.wav", waitForCompletion: false)
-        self.run(action)
-    }
-    
 }
 
+//------------------------------------
+// MARK: - Public Methods
+//------------------------------------
 
 extension GameScene {
     
@@ -194,7 +212,7 @@ extension GameScene {
         addChild(overMsg)
         overMsg.alpha = 1
         overMsg.zPosition = 4
-        var fadeOutAction = SKAction.fadeIn(withDuration: 1) 
+        var fadeOutAction = SKAction.fadeIn(withDuration: 1)
         fadeOutAction.timingMode = .easeInEaseOut
         overMsg.run(fadeOutAction, completion: {
             overMsg.alpha = 1
@@ -202,7 +220,7 @@ extension GameScene {
         
         // show correct answer
         let fadeOutEmojiAction = SKAction.group([.fadeOut(withDuration: 0.5),
-                                            .scale(by: 0.1, duration: 0.5)])
+                                                 .scale(by: 0.1, duration: 0.5)])
         enumerateChildNodes(withName: "//*") {
             node, stop in
             if node.name == "figure" {
@@ -229,32 +247,13 @@ extension GameScene {
         })
     }
     
-    func showPoints(pointsNumber: Int, position: CGPoint) -> SKLabelNode? {
-        var points: SKLabelNode!
-        //Show label
-        points = SKLabelNode(fontNamed: "Chalkduster")
-        points.text = "+" + String(pointsNumber)
-        points.horizontalAlignmentMode = .left
-        points.fontSize = 60
-        points.position = CGPoint(x: position.x + 240.0, y: position.y + 40.0)
-        
-        //Remove label
-        let scaleOut = SKAction.scale(to: 0.01, duration:1.0)
-        let fadeOut = SKAction.fadeOut(withDuration: 1.0)
-        let group = SKAction.group([scaleOut, fadeOut])
-        let seq = SKAction.sequence([group, SKAction.removeFromParent()])
-        points.run(seq)
-        
-        return points
-    }
-    
     func moveToNextLevel() {
         var extraTime = 1
         for node in children {
-                if let emoji = node as? SKLabelNode {
-                    if (emoji.text?.contains("⏱"))! {
-                        extraTime = 3
-                        continue
+            if let emoji = node as? SKLabelNode {
+                if (emoji.text?.contains("⏱"))! {
+                    extraTime = 2
+                    continue
                 }
             }
         }
@@ -263,17 +262,19 @@ extension GameScene {
             let transition = SKTransition.crossFade(withDuration: 0)
             let nextLevelScene = GameScene(fileNamed:"GameScene")
             nextLevelScene!.level = self.level + 1
-            nextLevelScene!.timer = self.timer + Double(extraTime) + 0.2
+            nextLevelScene!.timer = self.timer + Double(extraTime)
             nextLevelScene!.scaleMode = SKSceneScaleMode.aspectFill
             self.scene!.view?.presentScene(nextLevelScene!, transition: transition)
         }
         self.run(SKAction.sequence([SKAction.wait(forDuration : 0.2), action]))
-        
-        
     }
+    
 }
 
+//------------------------------------
 // MARK: - Touches
+//------------------------------------
+
 extension GameScene {
     
     public override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -305,6 +306,23 @@ extension GameScene {
     
 }
 
+//------------------------------------
+// MARK: - Extensions
+//------------------------------------
+
+extension GameScene: GameEvents {
+    
+    func userDidRightChoice() {
+        let action = SKAction.playSoundFileNamed("right.wav", waitForCompletion: false)
+        self.run(action)
+    }
+    
+    func userDidWrongChoice() {
+        let action = SKAction.playSoundFileNamed("wrong.wav", waitForCompletion: false)
+        self.run(action)
+    }
+    
+}
 
 extension GameScene: ResetButtonDelegate {
     
